@@ -38,38 +38,72 @@ const Activities = () => {
     fetchActivities();
   }, []);
 
-  if (loading) return <div className="container mt-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
-  if (error) return <div className="container mt-4"><div className="alert alert-danger">Error: {error}</div></div>;
+  if (loading) {
+    return (
+      <div className="container mt-4 text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3 text-muted">Loading activities...</p>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="container mt-4">
+        <div className="alert alert-danger" role="alert">
+          <h4 className="alert-heading">Error!</h4>
+          <p className="mb-0">Failed to load activities: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Activities</h2>
+      <div className="mb-3">
+        <span className="badge bg-primary">Total: {activities.length} activities</span>
+      </div>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
-          <thead className="table-dark">
+          <thead>
             <tr>
-              <th>User Email</th>
-              <th>Activity Type</th>
-              <th>Duration (min)</th>
-              <th>Calories</th>
-              <th>Date</th>
+              <th scope="col">User Email</th>
+              <th scope="col">Activity Type</th>
+              <th scope="col">Duration (min)</th>
+              <th scope="col">Calories</th>
+              <th scope="col">Date</th>
             </tr>
           </thead>
           <tbody>
-            {activities.slice(0, 50).map((activity) => (
-              <tr key={activity._id}>
-                <td>{activity.user_email}</td>
-                <td>{activity.activity_type}</td>
-                <td>{activity.duration}</td>
-                <td>{activity.calories}</td>
-                <td>{new Date(activity.date).toLocaleDateString()}</td>
-              </tr>
-            ))}
+            {activities.slice(0, 50).map((activity) => {
+              // Parse the date properly
+              const activityDate = new Date(activity.date);
+              const formattedDate = activityDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              });
+              
+              return (
+                <tr key={activity._id}>
+                  <td>{activity.user_email}</td>
+                  <td><span className="badge bg-info">{activity.activity_type}</span></td>
+                  <td>{activity.duration}</td>
+                  <td><strong>{activity.calories}</strong></td>
+                  <td>{formattedDate}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
       {activities.length > 50 && (
-        <p className="text-muted">Showing 50 of {activities.length} activities</p>
+        <div className="alert alert-info" role="alert">
+          Showing 50 of {activities.length} activities
+        </div>
       )}
     </div>
   );

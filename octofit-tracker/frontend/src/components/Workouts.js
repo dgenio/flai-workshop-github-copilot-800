@@ -38,29 +38,66 @@ const Workouts = () => {
     fetchWorkouts();
   }, []);
 
-  if (loading) return <div className="container mt-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
-  if (error) return <div className="container mt-4"><div className="alert alert-danger">Error: {error}</div></div>;
+  if (loading) {
+    return (
+      <div className="container mt-4 text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3 text-muted">Loading workouts...</p>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="container mt-4">
+        <div className="alert alert-danger" role="alert">
+          <h4 className="alert-heading">Error!</h4>
+          <p className="mb-0">Failed to load workouts: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Workouts</h2>
+      <h2 className="mb-4">💪 Workouts</h2>
+      <div className="mb-3">
+        <span className="badge bg-warning">Total: {workouts.length} workouts</span>
+      </div>
       <div className="row">
         {workouts.map((workout) => (
           <div key={workout._id} className="col-md-6 col-lg-4 mb-4">
             <div className="card h-100">
+              <div className="card-header bg-gradient">
+                <h5 className="card-title mb-0">{workout.name}</h5>
+              </div>
               <div className="card-body">
-                <h5 className="card-title">{workout.name}</h5>
                 <p className="card-text">{workout.description}</p>
-                <ul className="list-unstyled">
-                  <li><strong>Difficulty:</strong> <span className={`badge ${
-                    workout.difficulty === 'Beginner' ? 'bg-success' :
-                    workout.difficulty === 'Intermediate' ? 'bg-warning' :
-                    workout.difficulty === 'Advanced' ? 'bg-danger' : 'bg-dark'
-                  }`}>{workout.difficulty}</span></li>
-                  <li><strong>Duration:</strong> {workout.duration} minutes</li>
-                  <li><strong>Calories:</strong> ~{workout.calories_estimate}</li>
-                  <li><strong>Category:</strong> {workout.category}</li>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    <strong>Difficulty:</strong> 
+                    <span className={`badge ms-2 ${
+                      workout.difficulty === 'Beginner' ? 'bg-success' :
+                      workout.difficulty === 'Intermediate' ? 'bg-warning text-dark' :
+                      workout.difficulty === 'Advanced' ? 'bg-danger' : 'bg-dark'
+                    }`}>{workout.difficulty}</span>
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Duration:</strong> {workout.duration} minutes
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Calories:</strong> ~{workout.calories_estimate}
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Category:</strong> 
+                    <span className="badge bg-info ms-2">{workout.category}</span>
+                  </li>
                 </ul>
+              </div>
+              <div className="card-footer text-center">
+                <button className="btn btn-sm btn-primary">Start Workout</button>
               </div>
             </div>
           </div>

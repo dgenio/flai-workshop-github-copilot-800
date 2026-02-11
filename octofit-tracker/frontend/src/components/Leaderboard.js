@@ -38,37 +38,56 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, []);
 
-  if (loading) return <div className="container mt-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
-  if (error) return <div className="container mt-4"><div className="alert alert-danger">Error: {error}</div></div>;
+  if (loading) {
+    return (
+      <div className="container mt-4 text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3 text-muted">Loading leaderboard...</p>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="container mt-4">
+        <div className="alert alert-danger" role="alert">
+          <h4 className="alert-heading">Error!</h4>
+          <p className="mb-0">Failed to load leaderboard: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Leaderboard</h2>
+      <h2 className="mb-4">🏆 Leaderboard</h2>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
-          <thead className="table-dark">
+          <thead>
             <tr>
-              <th>Rank</th>
-              <th>User Name</th>
-              <th>Email</th>
-              <th>Team</th>
-              <th>Total Calories</th>
-              <th>Total Activities</th>
+              <th scope="col">Rank</th>
+              <th scope="col">User Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Team</th>
+              <th scope="col">Total Calories</th>
+              <th scope="col">Total Activities</th>
             </tr>
           </thead>
           <tbody>
             {leaderboard.map((entry) => (
-              <tr key={entry._id}>
+              <tr key={entry._id} className={entry.rank <= 3 ? 'table-warning' : ''}>
                 <td>
                   <strong className={entry.rank <= 3 ? 'text-warning' : ''}>
-                    {entry.rank}
+                    {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
                   </strong>
                 </td>
-                <td>{entry.user_name}</td>
+                <td><strong>{entry.user_name}</strong></td>
                 <td>{entry.user_email}</td>
-                <td>{entry.team}</td>
-                <td>{entry.total_calories}</td>
-                <td>{entry.total_activities}</td>
+                <td><span className="badge bg-primary">{entry.team || 'No Team'}</span></td>
+                <td><strong className="text-success">{(entry.total_calories || 0).toLocaleString()}</strong></td>
+                <td>{entry.total_activities || 0}</td>
               </tr>
             ))}
           </tbody>
