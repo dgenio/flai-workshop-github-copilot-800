@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -13,12 +14,7 @@ const Users = () => {
     team: ''
   });
 
-  const getApiUrl = (endpoint) => {
-    const codespace_name = process.env.REACT_APP_CODESPACE_NAME;
-    return codespace_name
-      ? `https://${codespace_name}-8000.app.github.dev/api/${endpoint}/`
-      : `http://localhost:8000/api/${endpoint}/`;
-  };
+
 
   useEffect(() => {
     fetchUsers();
@@ -27,7 +23,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const apiUrl = getApiUrl('users');
+      const apiUrl = getApiUrl('api/users');
       console.log('Fetching users from:', apiUrl);
       
       const response = await fetch(apiUrl);
@@ -50,7 +46,7 @@ const Users = () => {
 
   const fetchTeams = async () => {
     try {
-      const apiUrl = getApiUrl('teams');
+      const apiUrl = getApiUrl('api/teams');
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -88,7 +84,7 @@ const Users = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiUrl = getApiUrl(`users/${editingUser._id}`);
+      const apiUrl = getApiUrl(`api/users/${editingUser._id}`);
       const response = await fetch(apiUrl, {
         method: 'PUT',
         headers: {

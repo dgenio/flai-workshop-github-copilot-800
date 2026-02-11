@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -8,12 +9,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        // Determine the API URL based on environment
-        const codespace_name = process.env.REACT_APP_CODESPACE_NAME;
-        const apiUrl = codespace_name
-          ? `https://${codespace_name}-8000.app.github.dev/api/leaderboard/`
-          : 'http://localhost:8000/api/leaderboard/';
-        
+        const apiUrl = getApiUrl('api/leaderboard');
         console.log('Fetching leaderboard from:', apiUrl);
         
         const response = await fetch(apiUrl);

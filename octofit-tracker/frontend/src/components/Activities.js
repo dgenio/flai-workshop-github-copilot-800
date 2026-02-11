@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
@@ -8,12 +9,7 @@ const Activities = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        // Determine the API URL based on environment
-        const codespace_name = process.env.REACT_APP_CODESPACE_NAME;
-        const apiUrl = codespace_name
-          ? `https://${codespace_name}-8000.app.github.dev/api/activities/`
-          : 'http://localhost:8000/api/activities/';
-        
+        const apiUrl = getApiUrl('api/activities');
         console.log('Fetching activities from:', apiUrl);
         
         const response = await fetch(apiUrl);

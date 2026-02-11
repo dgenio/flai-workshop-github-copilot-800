@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
@@ -8,12 +9,7 @@ const Teams = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        // Determine the API URL based on environment
-        const codespace_name = process.env.REACT_APP_CODESPACE_NAME;
-        const apiUrl = codespace_name
-          ? `https://${codespace_name}-8000.app.github.dev/api/teams/`
-          : 'http://localhost:8000/api/teams/';
-        
+        const apiUrl = getApiUrl('api/teams');
         console.log('Fetching teams from:', apiUrl);
         
         const response = await fetch(apiUrl);
